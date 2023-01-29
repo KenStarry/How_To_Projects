@@ -2,7 +2,9 @@ package com.example.notifications.di
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.material.icons.Icons
@@ -11,6 +13,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.*
 import androidx.core.app.NotificationManagerCompat
 import com.example.notifications.R
+import com.example.notifications.receiver.MyReceiver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,7 +29,18 @@ object NotificationModule {
     @Singleton
     fun provideNotificationBuilder(
         @ApplicationContext context: Context
-    ) : NotificationCompat.Builder {
+    ): NotificationCompat.Builder {
+
+        val intent = Intent(context, MyReceiver::class.java).apply {
+            putExtra("MESSAGE", "clicked already")
+        }
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
 
         return NotificationCompat.Builder(context, "Main Channel ID")
             .setContentTitle("Welcome") // title
@@ -40,6 +54,7 @@ object NotificationModule {
                     .setContentText("Unlock to see the message.")
                     .build()
             )
+            .addAction(0, "DONE", pendingIntent)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -47,7 +62,7 @@ object NotificationModule {
     @Singleton
     fun provideNotificationManager(
         @ApplicationContext context: Context
-    ) : NotificationManagerCompat {
+    ): NotificationManagerCompat {
 
         val notificationManager = NotificationManagerCompat.from(context)
         val channel = NotificationChannel(
