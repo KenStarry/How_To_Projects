@@ -12,8 +12,11 @@ import androidx.compose.material.icons.outlined.Notifications
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.*
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.TaskStackBuilder
+import androidx.core.net.toUri
 import com.example.notifications.MainActivity
 import com.example.notifications.R
+import com.example.notifications.navigation.MY_URI
 import com.example.notifications.receiver.MyReceiver
 import dagger.Module
 import dagger.Provides
@@ -43,10 +46,16 @@ object NotificationModule {
             PendingIntent.FLAG_IMMUTABLE
         )
 
-        val clickIntent = Intent(context, MainActivity::class.java)
-        val clickPendingIntent = PendingIntent.getActivity(
-            context, 1, clickIntent, PendingIntent.FLAG_IMMUTABLE
+        val clickIntent = Intent(
+            Intent.ACTION_VIEW,
+            "$MY_URI/message=Coming from Notification".toUri(),
+            context,
+            MainActivity::class.java
         )
+        val clickPendingIntent = TaskStackBuilder.create(context).run {
+            addNextIntentWithParentStack(clickIntent)
+            getPendingIntent(1, PendingIntent.FLAG_IMMUTABLE)
+        }
 
         return NotificationCompat.Builder(context, "Main Channel ID")
             .setContentTitle("Welcome") // title

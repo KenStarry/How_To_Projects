@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.notifications.MainViewModel
+import com.example.notifications.navigation.Screen
 
 @Composable
 fun MainScreen(
@@ -46,7 +47,11 @@ fun MainScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = {  }) {
+        Button(onClick = {
+            navHostController.navigate(
+                Screen.Details.passMessage("coming from main screen.")
+            )
+        }) {
             Text(text = "Details Screen")
         }
 
