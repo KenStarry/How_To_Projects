@@ -12,6 +12,7 @@ import androidx.compose.material.icons.outlined.Notifications
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.*
 import androidx.core.app.NotificationManagerCompat
+import com.example.notifications.MainActivity
 import com.example.notifications.R
 import com.example.notifications.receiver.MyReceiver
 import dagger.Module
@@ -42,6 +43,11 @@ object NotificationModule {
             PendingIntent.FLAG_IMMUTABLE
         )
 
+        val clickIntent = Intent(context, MainActivity::class.java)
+        val clickPendingIntent = PendingIntent.getActivity(
+            context, 1, clickIntent, PendingIntent.FLAG_IMMUTABLE
+        )
+
         return NotificationCompat.Builder(context, "Main Channel ID")
             .setContentTitle("Welcome") // title
             .setContentText("Kenstarry Tech.") // subtitle
@@ -54,7 +60,8 @@ object NotificationModule {
                     .setContentText("Unlock to see the message.")
                     .build()
             )
-            .addAction(0, "DONE", pendingIntent)
+            .addAction(0, "Done", pendingIntent)
+            .setContentIntent(clickPendingIntent)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

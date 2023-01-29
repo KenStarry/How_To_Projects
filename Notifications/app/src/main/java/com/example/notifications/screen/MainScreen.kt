@@ -10,10 +10,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.example.notifications.MainViewModel
 
 @Composable
 fun MainScreen(
+    navHostController: NavHostController,
     mainVM: MainViewModel = hiltViewModel()
 ) {
 
@@ -40,6 +42,12 @@ fun MainScreen(
 
         Button(onClick = { mainVM.cancelSimpleNotification() }) {
             Text(text = "Cancel Notification")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = {  }) {
+            Text(text = "Details Screen")
         }
 
     }
